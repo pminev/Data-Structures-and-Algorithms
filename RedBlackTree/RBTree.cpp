@@ -76,13 +76,8 @@ void RBTree::copyTree_help(node *& newNode, node * oldNode)
 void RBTree::insert_help(keyType key, valueType val, node *& currNode)
 {
 	if (!currNode)
-	{	
-		if (currNode!=pRoot)
-		{
-			currNode = new node(key, val, RED);
-			return;
-		}
-		currNode = new node(key, val);
+	{
+		currNode = new node(key, val, RED);
 		return;
 	}
 
@@ -233,7 +228,7 @@ RBTree::node*& RBTree::validateNode(node * currNode)
 		currNode = rotateLeft(currNode);
 	}
 
-	if (isRed(currNode) && isRed(currNode->pLeft->pLeft))
+	if (isRed(currNode->pLeft) && isRed(currNode->pLeft->pLeft))
 	{
 		currNode = rotateRight(currNode);
 	}

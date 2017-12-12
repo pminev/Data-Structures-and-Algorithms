@@ -7,7 +7,9 @@ enum TreeColor {
 	BLACK = 1
 };
 
-
+/*
+       LEFT LEANING RED-BLACK TREE
+*/
 class RBTree
 {
 private:
