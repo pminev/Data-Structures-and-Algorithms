@@ -31,9 +31,10 @@ void RBTree::insert(keyType key, valueType val)
 	insert_help(key, val, pRoot);
 }
 
-bool RBTree::remove(keyType key)
+void RBTree::remove(keyType key)
 {
-	return remove_help(key, pRoot);
+	search(key);
+	pRoot = remove_help(key, pRoot);
 }
 
 valueType RBTree::search(keyType key)
@@ -98,66 +99,65 @@ void RBTree::insert_help(keyType key, valueType val, node *& currNode)
 	throw std::logic_error("Insertion failed: element with such key already exists!\n");
 }
 
-bool RBTree::remove_help(keyType key, node *& currNode)
+RBTree::node*& RBTree::remove_help(keyType key, node *& currNode)
 {
-	if (!currNode)
-	{
-		throw std::logic_error("Removing failed: Element with such key doesn't exists!\n");
-	}
-
-	if (key > currNode->key)
-	{
-		return remove_help(key, currNode->pRight);
-	}
-
 	if (key < currNode->key)
 	{
-		return remove_help(key, currNode->pLeft);
-	}
-
-	//If node doesn't have any children
-	if (!currNode->pLeft && !currNode->pRight)
-	{
-		delete currNode;
-		currNode = nullptr;
-		return true;
-	}
-
-	//If node has two children
-	if (currNode->pLeft && currNode->pRight)
-	{
-		node* temp = currNode->pLeft;
-
-		while (temp->pRight)
+		if (!isRed(currNode->pLeft) && !isRed(currNode->pLeft->pLeft))
 		{
-			temp = temp->pRight;
+
+			currNode = moveRedLeft(currNode);
+		}
+		currNode->pLeft = remove_help(key, currNode->pLeft);
+	}
+	else
+	{
+		if (isRed(currNode->pLeft))
+		{
+			currNode = rotateRight(currNode);
 		}
 
-		currNode->key = temp->key;
-		currNode->value = temp->value;
-		remove_help(temp->key, currNode->pLeft);
+		if ((key == currNode->key) && !currNode->pRight)
+		{
+			delete currNode;
+			currNode = nullptr;
+			return currNode;
+		}
 
-	}
-	else  //has only one child
-	{
-		node* destroyer = currNode;
+		if (!isRed(currNode->pRight) &&
+			!isRed(currNode->pRight->pLeft))
+		{
+			currNode = moveRedRight(currNode);
+		}
 
-		if (currNode->pLeft)
-			currNode = currNode->pLeft;
+		if (key == currNode->key)
+		{
+			node* temp = currNode->pLeft;
+
+			while (temp->pRight)
+			{
+				temp = temp->pRight;
+			}
+
+			currNode->key = temp->key;
+			currNode->value = temp->value;
+
+			currNode->pLeft = remove_help(currNode->key, currNode->pLeft);
+		}
 		else
-			currNode = currNode->pRight;
-
-		delete destroyer;
-
+		{
+			currNode->pRight = remove_help(key, currNode->pRight);
+		}
 	}
 
+	return validateNode(currNode);
 }
 
 valueType RBTree::search_help(keyType key, node *& currNode)
 {
 	if (!currNode)
 	{
-		throw std::logic_error("Searching failed: Element with such key doesn't exists!\n");
+		throw std::logic_error("Operation failed: Element with such key doesn't exists!\n");
 	}
 
 	if (key == currNode->key)
@@ -208,11 +208,6 @@ bool RBTree::isRed(node * currNode)
 	return RED == currNode->color;
 }
 
-bool RBTree::isBlack(node * currNode)
-{
-	return BLACK == currNode->color;
-}
-
 void RBTree::flipColors(node *& currNode)
 {
 	currNode->color = (currNode->color == RED) ? BLACK : RED;
@@ -240,3 +235,28 @@ RBTree::node*& RBTree::validateNode(node * currNode)
 
 	return currNode;
 }
+
+RBTree::node*& RBTree::moveRedRight(node * currNode)
+{
+	flipColors(currNode);
+	if (isRed(currNode->pLeft->pLeft))
+	{
+		currNode = rotateRight(currNode);
+		flipColors(currNode);
+	}
+
+	return currNode;
+}
+
+RBTree::node *& RBTree::moveRedLeft(node * currNode)
+{
+	flipColors(currNode);
+	if (isRed(currNode->pLeft->pLeft))
+	{
+		currNode->pRight = rotateRight(currNode->pRight);
+		currNode = rotateLeft(currNode);
+		flipColors(currNode);
+	}
+	return currNode;
+}
+
