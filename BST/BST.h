@@ -2,6 +2,11 @@
 typedef int keyType;
 typedef int valueType;
 
+/**********************************
+
+      Classic Implementation of BST
+        
+***********************************/
 class BST
 {
 private:
