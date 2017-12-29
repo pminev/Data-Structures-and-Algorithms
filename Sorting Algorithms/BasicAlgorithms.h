@@ -1,14 +1,14 @@
 #pragma once
 #include <iostream>
 
-template<class Data,class Function>
+template<class Data, class Function>
 void insertionSort(Data arr[], int size, Function cmp)
 {
 	for (size_t i = 1; i < size; i++)
 	{
 		int temp = arr[i];
 		int size = i;
-		while (cmp(temp, arr[size - 1]) && size>0)
+		while (cmp(temp, arr[size - 1]) && size > 0)
 		{
 			arr[size] = arr[size - 1];
 			size--;
@@ -17,7 +17,7 @@ void insertionSort(Data arr[], int size, Function cmp)
 	}
 }
 
-template <class Data,class Function>
+template <class Data, class Function>
 void selectionSort(Data arr[], int size, Function cmp)
 {
 	for (size_t i = 0; i < size; i++)
@@ -32,6 +32,24 @@ void selectionSort(Data arr[], int size, Function cmp)
 		if (i != indexToSwap)
 		{
 			std::swap(arr[i], arr[indexToSwap]);
+		}
+	}
+}
+
+template<class Data, class Function>
+void bubbleSort(Data arr[], int size, Function cmp)
+{
+	bool swapped = true;
+	for (int i = size - 1; i >= 0 && swapped; i--)
+	{
+		swapped = false;
+		for (int j = 0; j < i; j++)
+		{
+			if (cmp(arr[j], arr[j + 1]))
+			{
+				std::swap(arr[j], arr[j + 1]);
+				swapped = true;
+			}
 		}
 	}
 }
