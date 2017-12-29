@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 
+//Basic sorting algorithms
+
 template<class Data, class Function>
 void insertionSort(Data arr[], int size, Function cmp)
 {
