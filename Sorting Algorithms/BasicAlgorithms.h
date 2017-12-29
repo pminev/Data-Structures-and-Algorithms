@@ -1,0 +1,37 @@
+#pragma once
+#include <iostream>
+
+template<class Data,class Function>
+void insertionSort(Data arr[], int size, Function cmp)
+{
+	for (size_t i = 1; i < size; i++)
+	{
+		int temp = arr[i];
+		int size = i;
+		while (cmp(temp, arr[size - 1]) && size>0)
+		{
+			arr[size] = arr[size - 1];
+			size--;
+		}
+		arr[size] = temp;
+	}
+}
+
+template <class Data,class Function>
+void selectionSort(Data arr[], int size, Function cmp)
+{
+	for (size_t i = 0; i < size; i++)
+	{
+		int indexToSwap = i;
+		for (size_t j = i + 1; j < size; j++)
+		{
+			if (cmp(arr[indexToSwap], arr[j]))
+				indexToSwap = j;
+		}
+
+		if (i != indexToSwap)
+		{
+			std::swap(arr[i], arr[indexToSwap]);
+		}
+	}
+}
