@@ -107,5 +107,4 @@ void quickSort(Data arr[], const int size, Function cmp)
 
 
 //TO DO 
-//
 //1. MergeSort
