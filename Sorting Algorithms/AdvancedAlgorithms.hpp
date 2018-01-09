@@ -1,10 +1,11 @@
 #pragma once
 #include <iostream>
+#include "SortingAlgorithms.h"
 
 namespace HeapSort
 {
 	template <class Data, class Function>
-	void siftDown(Data arr[], const int parent, const int size, Function cmp)
+	void siftDown(Data arr[],int parent, const int size, Function cmp)
 	{
 		int child = 2 * parent + 1;
 		while (child < size)
@@ -40,7 +41,7 @@ namespace HeapSort
 template<class Data, class Function>
 void heapSort(Data arr[], const int size, Function cmp)
 {
-	HeapSort::buildHeap(arr, size);
+	HeapSort::buildHeap(arr, size,cmp);
 
 	for (int i = size - 1; i > 0; i--)
 	{
@@ -52,13 +53,21 @@ void heapSort(Data arr[], const int size, Function cmp)
 namespace QuickSort
 {
 	template <class Data, class Function>
-	void quickSort(Data arr[], const int beg, const int end, Function cmp)
+	void quickSort(Data arr[],int beg,int end, Function cmp)
 	{
-		if (beg < end)
+		while(beg < end)
 		{
 			int pivot = partition(arr, beg, end, cmp);
-			quickSort(arr, beg, pivot - 1,cmp);
-			quickSort(arr, pivot + 1, end, cmp);
+			if (pivot - beg < end - pivot)
+			{
+				quickSort(arr, beg, pivot - 1,cmp);
+				beg = pivot + 1;
+			}
+			else
+			{
+				quickSort(arr, pivot + 1, end,cmp);
+				end = pivot - 1;
+			}
 		}
 	}
 
@@ -98,10 +107,16 @@ namespace QuickSort
 	}
 }
 
-template <class Data, class Function>
-void quickSort(Data arr[], const int size, Function cmp)
+template <class Data, class Function = LTC<Data>>
+void quickSort(Data arr[], const int size, Function cmp )
 {
 	QuickSort::quickSort(arr, 0, size - 1,cmp);
+}
+
+template<class Data, class Function=LTC<Data>>
+void mergeSort(Data arr[], const int size, Function cmp)
+{
+	insertionSort(arr, size, cmp);
 }
 
 

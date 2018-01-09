@@ -1,7 +1,8 @@
 #pragma once
 #include <iostream>
+#include "SortingAlgorithms.h"
 
-template<class Data, class Function>
+template<class Data, class Function = LTC<Data>>
 void insertionSort(Data arr[], int size, Function cmp)
 {
 	for (size_t i = 1; i < size; i++)
@@ -17,7 +18,7 @@ void insertionSort(Data arr[], int size, Function cmp)
 	}
 }
 
-template <class Data, class Function>
+template <class Data, class Function = LTC<Data>>
 void selectionSort(Data arr[], int size, Function cmp)
 {
 	for (size_t i = 0; i < size; i++)
@@ -36,8 +37,8 @@ void selectionSort(Data arr[], int size, Function cmp)
 	}
 }
 
-template<class Data, class Function>
-void bubbleSort(Data arr[], int size, Function cmp)
+	template<class Data, class Function = LTC<Data>>
+	void bubbleSort(Data arr[], int size, Function cmp)
 {
 	bool swapped = true;
 	for (int i = size - 1; i >= 0 && swapped; i--)
