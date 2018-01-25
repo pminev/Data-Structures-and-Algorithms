@@ -1,5 +1,4 @@
 #pragma once
-
 #include <random>
 
 typedef int keyType;
@@ -18,18 +17,27 @@ public:
 	SkipList& operator=(const SkipList&);
 	~SkipList();
 
+	void insert(keyType, valueType);
+	void remove(keyType);
+	bool find(keyType);
+
+	void printAllLevels();
+
+private:
+	void clear();
+	void copyFrom(const SkipList&);
+
 private:
 	struct node
 	{
 		keyType key;
 		valueType value;
 		unsigned int numOfLevels;
-		node** levels;
+		node* levels[MAX_LEVELS];
 
-		node(keyType k, valueType v) :key(k), value(v) {
-			numOfLevels = uniformDistribution(generator);
-			levels = new node*[numOfLevels];
-			for (int i = 0; i < numOfLevels; i++){
+		node(keyType k, valueType v,unsigned int l=0) :key(k), value(v) {
+			numOfLevels = l==0? (uniformDistribution(generator) ) : 5;
+			for (int i = 0; i < numOfLevels; i++) {
 				levels[i] = nullptr;
 			}
 		}
@@ -37,5 +45,5 @@ private:
 	};
 
 	node* pFront;
-	unsigned int length;
+	unsigned int size;
 };
