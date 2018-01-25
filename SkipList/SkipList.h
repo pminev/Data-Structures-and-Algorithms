@@ -18,14 +18,11 @@ public:
 	~SkipList();
 
 	void insert(keyType, valueType);
-	void remove(keyType);
+	bool remove(keyType);
 	bool find(keyType);
 
 	void printAllLevels();
 
-private:
-	void clear();
-	void copyFrom(const SkipList&);
 
 private:
 	struct node
@@ -46,4 +43,11 @@ private:
 
 	node* pFront;
 	unsigned int size;
+
+private:
+	void clear();
+	void copyFrom(const SkipList&);
+
+	node* findEl(keyType);
+
 };
