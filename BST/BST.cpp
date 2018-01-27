@@ -43,6 +43,11 @@ valueType BST::search(keyType key)
 
 void BST::clear(node*& currNode)
 {
+	if(currNode==nullptr)
+	{
+		return;
+	}
+	
 	if (currNode->pLeft)
 	{
 		clear(currNode->pLeft);
