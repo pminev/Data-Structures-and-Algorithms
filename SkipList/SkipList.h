@@ -19,7 +19,7 @@ public:
 
 	void insert(keyType, valueType);
 	bool remove(keyType);
-	bool find(keyType);
+	valueType find(keyType);
 
 	void printAllLevels();
 

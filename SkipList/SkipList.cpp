@@ -1,5 +1,6 @@
 #include "SkipList.h"
 #include <iostream>
+#include <exception>
 
 SkipList::SkipList()
 {
@@ -42,7 +43,7 @@ SkipList::node * SkipList::findEl(keyType key)
 {
 	node* it = pFront;
 	unsigned int num = pFront->numOfLevels;
-	for (int i = num; i >0; i--)
+	for (int i = num; i > 0; i--)
 	{
 		while (it->levels[i - 1] != nullptr && it->levels[i - 1]->key <= key)
 		{
@@ -71,6 +72,12 @@ void SkipList::printAllLevels()
 			}
 			it = it->levels[0];
 		}
+	/*	while (it!=nullptr)
+		{
+			std::cout << it->key << "   ";
+			it = it->levels[i];
+
+		}*/
 		std::cout << '\n';
 	}
 }
@@ -100,6 +107,13 @@ void SkipList::insert(keyType key, valueType val)
 	node* it = pFront;
 	unsigned int num = it->numOfLevels;
 
+	if (key < it->key) {
+		newEl->key = it->key;
+		newEl->value = it->value;
+		it->key = key;
+		it->value = val;
+	}
+
 	while (num != 0) {
 		//Skips elements forward reaching new correct destination		
 		while (it->levels[num - 1] != nullptr && it->levels[num - 1]->key < key)
@@ -128,16 +142,35 @@ bool SkipList::remove(keyType key)
 	unsigned int num = it->numOfLevels;
 	node* found = findEl(key);
 
-	if (found==nullptr)
+	if (found == nullptr) {
 		return false;
+	}
 
-	//take care of redirection of pointers
+	while (num != 0){
+		while (it->levels[num-1]!=nullptr && it->levels[num-1]->key<found->key ){
+			it = it->levels[num - 1];
+		}
 
+		if (it->levels[num-1]==found){
+			it->levels[num - 1] = found->levels[num - 1];
+		}
+
+		if (num-1==0){
+			delete found;
+		}
+		num--;
+	}
+
+	size--;
 	return true;
 }
 
-bool SkipList::find(keyType key)
+valueType SkipList::find(keyType key)
 {
+	node* el = findEl(key);
+	if (el == nullptr) {
+		throw std::logic_error("There's no element with such key");
+	}
 
-	return (findEl(key)==nullptr) ? false:true;
+	return el->value;
 }
