@@ -14,6 +14,9 @@ int main()
 	std::cout << ls.find(25)<<'\n';
 	std::cout << ls.remove(25) << '\n';
 
+	ls.printAllLevels();
+	std::cout << '\n';
+
 	ls.insert(5, 5);
 	ls.printAllLevels();
 

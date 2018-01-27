@@ -1,13 +1,10 @@
 #pragma once
 #include <random>
-
+#include <stdlib.h>
+#include <ctime>
 typedef int keyType;
 typedef int valueType;
 const int MAX_LEVELS = 5;
-
-static std::random_device rd;
-static std::mt19937 generator(rd());
-static std::uniform_int_distribution<> uniformDistribution(1, MAX_LEVELS);
 
 class SkipList
 {
@@ -32,8 +29,8 @@ private:
 		unsigned int numOfLevels;
 		node* levels[MAX_LEVELS];
 
-		node(keyType k, valueType v,unsigned int l=0) :key(k), value(v) {
-			numOfLevels = l==0? (uniformDistribution(generator) ) : 5;
+		node(keyType k, valueType v, unsigned int l = 0) :key(k), value(v) {
+			numOfLevels = l == 0 ? (rand() % 5 + 1) : 5;
 			for (int i = 0; i < numOfLevels; i++) {
 				levels[i] = nullptr;
 			}
@@ -43,6 +40,7 @@ private:
 
 	node* pFront;
 	unsigned int size;
+	static bool isSeeded;
 
 private:
 	void clear();

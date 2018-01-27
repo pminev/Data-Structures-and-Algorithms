@@ -2,10 +2,16 @@
 #include <iostream>
 #include <exception>
 
+bool SkipList::isSeeded = false;
+
 SkipList::SkipList()
 {
 	pFront = nullptr;
 	size = 0;
+	if (isSeeded == false) {
+		srand(time(NULL));
+		isSeeded = true;
+	}
 }
 
 SkipList::SkipList(const SkipList& other)
@@ -143,7 +149,7 @@ bool SkipList::remove(keyType key)
 	node* found = findEl(key);
 
 	if (found == nullptr) {
-		return false;
+		throw std::logic_error("Element with such key doesn't exists!\n");
 	}
 
 	while (num != 0){
