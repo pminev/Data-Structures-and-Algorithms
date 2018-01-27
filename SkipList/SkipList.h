@@ -27,10 +27,11 @@ private:
 		keyType key;
 		valueType value;
 		unsigned int numOfLevels;
-		node* levels[MAX_LEVELS];
+		node** levels;
 
 		node(keyType k, valueType v, unsigned int l = 0) :key(k), value(v) {
-			numOfLevels = l == 0 ? (rand() % 5 + 1) : 5;
+			numOfLevels = l == 0 ? (rand() % MAX_LEVELS + 1) : 5;
+			levels = new node*[numOfLevels];
 			for (int i = 0; i < numOfLevels; i++) {
 				levels[i] = nullptr;
 			}
