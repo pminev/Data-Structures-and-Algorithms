@@ -1,4 +1,5 @@
 #pragma once
+#include <stack>
 typedef int keyType;
 typedef int valType;
 
@@ -9,6 +10,10 @@ public:
 	SplayTree(const SplayTree&);
 	SplayTree& operator=(const SplayTree&);
 	~SplayTree();
+
+	void insert(keyType key, valType val);
+	bool remove(keyType key);
+	valType search(keyType key);
 
 private:
 	struct node {
@@ -26,5 +31,19 @@ private:
 	};
 
 private:
-	node * root;
+	void clear(node*&);
+	void copyFrom(const SplayTree&);
+
+	void copyTree_help(node*&, node*);
+	void insert_help(keyType, valType, node*&);
+	bool remove_help(keyType, node*&);
+	valType search_help(keyType, node*&);
+
+	void rotateLeft(node*&,node*&);
+	void rotateRight(node*&,node*&);
+	void splay(node*&);
+
+private:
+	node* pRoot;
+	std::stack<node*> vertices;
 };
