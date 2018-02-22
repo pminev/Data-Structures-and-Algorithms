@@ -11,11 +11,9 @@ SplayTree::SplayTree(const SplayTree& other)
 
 SplayTree& SplayTree::operator=(const SplayTree& other)
 {
-	if (this != &other)
-	{
+	if (this != &other) {
 		clear(pRoot);
 		copyFrom(other);
-
 	}
 	return *this;
 }
@@ -42,18 +40,15 @@ valType SplayTree::search(keyType key)
 
 void SplayTree::clear(node*& currNode)
 {
-	if (currNode == nullptr)
-	{
+	if (currNode == nullptr) {
 		return;
 	}
 
-	if (currNode->pLeft)
-	{
+	if (currNode->pLeft) {
 		clear(currNode->pLeft);
 	}
 
-	if (currNode->pRight)
-	{
+	if (currNode->pRight) {
 		clear(currNode->pRight);
 	}
 
@@ -68,8 +63,7 @@ void SplayTree::copyFrom(const SplayTree & other)
 
 void SplayTree::copyTree_help(node*& root, node* other)
 {
-	if (!other)
-	{
+	if (!other) {
 		return;
 	}
 	root = new node(other->key, other->value);
@@ -79,27 +73,26 @@ void SplayTree::copyTree_help(node*& root, node* other)
 
 void SplayTree::insert_help(keyType key, valType val, node*& root)
 {
-	if (!root)
-	{
+	if (!root) {
 		root = new node(key, val);
 		splay(root);
 		return;
 	}
 
-	if (key > root->key)
-	{
+	if (key > root->key) {
 		vertices.push(root);
 		insert_help(key, val, root->pRight);
 		return;
 	}
 
-	if (key < root->key)
-	{
+	if (key < root->key){
 		vertices.push(root);
 		insert_help(key, val, root->pLeft);
 		return;
 	}
 
+	while (!vertices.empty())
+		vertices.pop();
 	throw std::logic_error("Insertion failed: element with such key already exists!\n");
 }
 
@@ -153,12 +146,14 @@ bool SplayTree::remove_help(keyType key, node *& root)
 valType SplayTree::search_help(keyType key, node*& root)
 {
 	if (!root) {
+		while (!vertices.empty())
+			vertices.pop();
 		throw std::logic_error("Searching failed: Element with such key doesn't exists!\n");
 	}
 
 	if (key == root->key) {
 		splay(root);
-		return pRoot->value;	
+		return pRoot->value;
 	}
 
 	if (key > root->key) {
@@ -172,14 +167,13 @@ valType SplayTree::search_help(keyType key, node*& root)
 	}
 }
 
-void SplayTree::rotateLeft(node*& root,node*& parent, node*& grandParent)
+void SplayTree::rotateLeft(node*& root, node*& parent, node*& grandParent)
 {
 	node* myNode = root;
 	parent->pRight = root->pLeft;
 	myNode->pLeft = parent;
 
-	if (grandParent)
-	{
+	if (grandParent){
 		if (grandParent->pLeft == parent)
 			grandParent->pLeft = myNode;
 		else
@@ -190,19 +184,19 @@ void SplayTree::rotateLeft(node*& root,node*& parent, node*& grandParent)
 	}
 }
 
-void SplayTree::rotateRight(node*& root,node*& parent, node*& grandParent)
+void SplayTree::rotateRight(node*& root, node*& parent, node*& grandParent)
 {
 	node* myNode = root;
 	parent->pLeft = myNode->pRight;
 	myNode->pRight = parent;
 
-	if (grandParent)
-	{
+	if (grandParent){
 		if (grandParent->pLeft == parent)
 			grandParent->pLeft = myNode;
 		else
 			grandParent->pRight = myNode;
-	} else {
+	}
+	else {
 		pRoot = myNode;
 	}
 }
@@ -212,8 +206,7 @@ void SplayTree::splay(node* root)
 	node* parent = nullptr;
 	node* gParent = nullptr;
 	node* ggParent = nullptr;
-	while (vertices.size())
-	{
+	while (vertices.size()) {
 		parent = nullptr;
 		gParent = nullptr;
 		ggParent = nullptr;
@@ -240,32 +233,33 @@ void SplayTree::splay(node* root)
 
 		if (!gParent) {
 			if (parent->pLeft == root)
-				rotateRight(root,parent, gParent);
+				rotateRight(root, parent, gParent);
 			else
-				rotateLeft(root,parent, gParent);
+				rotateLeft(root, parent, gParent);
 		}
 		else if (parent->pLeft == root && gParent->pLeft == parent) {
-			rotateRight(parent,gParent, ggParent);
+			rotateRight(parent, gParent, ggParent);
 			if (!ggParent)
 				gParent = nullptr;
 			else
 				gParent = ggParent;
-			node* s = root;
-			rotateRight(s,parent, gParent);
+			rotateRight(root, parent, gParent);
 		}
 		else if (parent->pRight == root && gParent->pRight == parent) {
-			rotateLeft(parent,gParent, ggParent);
+			rotateLeft(parent, gParent, ggParent);
 			if (!ggParent)
 				gParent = nullptr;
-			rotateLeft(root,parent, gParent);
+			else
+				gParent = ggParent;
+			rotateLeft(root, parent, gParent);
 		}
-		else if (parent->pLeft==root&& gParent->pRight==parent){
-			rotateRight(root,parent, gParent);
-			rotateLeft(root,gParent, ggParent);
+		else if (parent->pLeft == root && gParent->pRight == parent) {
+			rotateRight(root, parent, gParent);
+			rotateLeft(root, gParent, ggParent);
 		}
 		else {
-			rotateLeft(root,parent, gParent);
-			rotateRight(root,gParent, ggParent);
+			rotateLeft(root, parent, gParent);
+			rotateRight(root, gParent, ggParent);
 		}
 
 
