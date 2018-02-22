@@ -39,9 +39,9 @@ private:
 	bool remove_help(keyType, node*&);
 	valType search_help(keyType, node*&);
 
-	void rotateLeft(node*&,node*&);
-	void rotateRight(node*&,node*&);
-	void splay(node*&);
+	void rotateLeft(node*&,node*&, node*&);
+	void rotateRight(node*&,node*&, node*&);
+	void splay(node*);
 
 private:
 	node* pRoot;
