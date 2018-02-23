@@ -45,18 +45,19 @@ void SkipList::copyFrom(const SkipList &other)
 	}
 }
 
-SkipList::node * SkipList::findEl(keyType key)
+SkipList::node* SkipList::findEl(keyType key)
 {
 	node* it = pFront;
 	unsigned int num = pFront->numOfLevels;
-	for (int i = num; i > 0; i--)
+
+	while (it->levels[num - 1] != nullptr && it->levels[num - 1]->key <= key)
 	{
-		while (it->levels[i - 1] != nullptr && it->levels[i - 1]->key <= key)
-		{
-			it = it->levels[i - 1];
-			if (it->key == key)
-				return it;
-		}
+
+		it = it->levels[((num - 1 == 0) ? num : --num)];
+		if (it == nullptr)
+			return nullptr;
+		if (it->key == key)
+			return &*it;
 	}
 
 	return nullptr;
@@ -78,12 +79,12 @@ void SkipList::printAllLevels()
 			}
 			it = it->levels[0];
 		}
-	/*	while (it!=nullptr)
-		{
-			std::cout << it->key << "   ";
-			it = it->levels[i];
+		/*	while (it!=nullptr)
+			{
+				std::cout << it->key << "   ";
+				it = it->levels[i];
 
-		}*/
+			}*/
 		std::cout << '\n';
 	}
 }
@@ -96,6 +97,8 @@ void SkipList::clear()
 		destroyer = pFront;
 		pFront = pFront->levels[0];
 		delete destroyer;
+		destroyer = nullptr;
+		size--;
 	}
 
 	size = 0;
@@ -152,17 +155,18 @@ bool SkipList::remove(keyType key)
 		throw std::logic_error("Element with such key doesn't exists!\n");
 	}
 
-	while (num != 0){
-		while (it->levels[num-1]!=nullptr && it->levels[num-1]->key<found->key ){
+	while (num != 0) {
+		while (it->levels[num - 1] != nullptr && it->levels[num - 1]->key < found->key) {
 			it = it->levels[num - 1];
 		}
 
-		if (it->levels[num-1]==found){
+		if (it->levels[num - 1] == found) {
 			it->levels[num - 1] = found->levels[num - 1];
 		}
 
-		if (num-1==0){
+		if (num - 1 == 0) {
 			delete found;
+			found = nullptr;
 		}
 		num--;
 	}
