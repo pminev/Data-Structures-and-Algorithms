@@ -123,7 +123,6 @@ int main()
 		ofs << rand() % MAX<<' ';
 	}
 	ofs.close();*/
-
 	int arr[MAX];
 	std::ifstream ifs("rand.txt");
 	for (int i = 0; i < MAX; i++)

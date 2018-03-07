@@ -5,7 +5,7 @@
 namespace HeapSort
 {
 	template <class Data, class Function>
-	void siftDown(Data arr[],int parent, const int size, Function cmp)
+	static void siftDown(Data arr[],int parent, const int size, Function cmp)
 	{
 		int child = 2 * parent + 1;
 		while (child < size)
@@ -28,7 +28,7 @@ namespace HeapSort
 		}
 	}
 	template<class Data, class Function>
-	void buildHeap(Data arr[], const int size, Function cmp)
+	static void buildHeap(Data arr[], const int size, Function cmp)
 	{
 		int lastParent = size / 2 - 1;
 		for (int i = lastParent; i >= 0; i--)
@@ -53,7 +53,7 @@ void heapSort(Data arr[], const int size, Function cmp)
 namespace QuickSort
 {
 	template <class Data, class Function>
-	void quickSort(Data arr[],int beg,int end, Function cmp)
+	static void quickSort(Data arr[],int beg,int end, Function cmp)
 	{
 		while(beg < end)
 		{
@@ -72,7 +72,7 @@ namespace QuickSort
 	}
 
 	template <class Data, class Function>
-	int partition(Data arr[], const int beg, const int end, Function cmp)
+	static int partition(Data arr[], const int beg, const int end, Function cmp)
 	{
 		int el = arr[beg];
 		int i = beg;

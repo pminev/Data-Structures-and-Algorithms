@@ -1,6 +1,4 @@
 #pragma once
-#include "AdvancedAlgorithms.hpp"
-#include "BasicAlgorithms.hpp"
 
 template<class Data>
 class LTC
